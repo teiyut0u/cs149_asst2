@@ -3,6 +3,7 @@
 
 #include "itasksys.h"
 #include <atomic>
+#include <condition_variable>
 #include <mutex>
 #include <queue>
 #include <thread>
@@ -109,6 +110,22 @@ public:
   TaskID runAsyncWithDeps(IRunnable *runnable, int num_total_tasks,
                           const std::vector<TaskID> &deps);
   void sync();
+
+private:
+  struct task {
+    IRunnable *runnable;
+    int id, num_total_tasks;
+  };
+  unsigned int n_workers;
+  std::vector<std::thread> workers;
+  std::mutex queue_mutex;
+  bool stop;
+  std::queue<task> task_queue;
+  std::atomic_uint n_rest_tasks, n_working;
+  std::condition_variable task_cv;
+  std::condition_variable done_cv;
+  void runThread();
+  void runThread2();
 };
 
 #endif

@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Debug",
             "program": "${workspaceFolder}/runtasks",
-            "args": ["-n 4","super_super_light"],
+            "args": ["-n 1","super_super_light"],
             "cwd": "${workspaceFolder}"
         }
     ]
